@@ -122,8 +122,8 @@ export const projects: Project[] = [
     ],
     contributions: [
       {
-        title: 'Auth and architecture',
-        body: 'NestJS authentication module and a follow-up architecture refactor, with written architecture notes.',
+        title: 'First auth module and architecture notes',
+        body: 'Wrote the first version of the NestJS authentication module (later reworked by a teammate) and the architecture refactor notes.',
         evidence: pr(nc, 3, 4),
       },
       {

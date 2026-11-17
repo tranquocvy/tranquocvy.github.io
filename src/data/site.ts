@@ -5,7 +5,7 @@ export const site = {
   tagline:
     'Final-year Software Engineering student at HCMUS. I build the parts of a product that have to keep working when things go wrong — payments, background jobs, caching, and the pipelines that ship them.',
   location: 'Ho Chi Minh City, VN',
-  email: 'quocvy23072005@gmail.com',
+  email: 'tqvy.work@gmail.com',
   github: 'https://github.com/tranquocvy',
   githubHandle: 'tranquocvy',
 };
