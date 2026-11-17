@@ -1,0 +1,25 @@
+---
+import type { Project } from '../data/projects';
+interface Props { project: Project; heading?: string }
+const { project: p, heading = 'What I built' } = Astro.props;
+---
+
+<h2>{heading}</h2>
+<div class="grid cols-2 contribs">
+  {p.contributions.map((c) => (
+    <article class="card">
+      <h3>{c.title}</h3>
+      <p>{c.body}</p>
+      <p class="evidence">
+        <span class="muted">Evidence: </span>
+        {c.evidence.map((e) => <a href={e.href}>{e.label}</a>)}
+      </p>
+    </article>
+  ))}
+</div>
+{p.notMine && <p class="note"><strong>Built by teammates, not me:</strong> {p.notMine}</p>}
+
+<style>
+  .contribs { margin-bottom: 20px; }
+  .contribs .evidence { margin: 0; }
+</style>

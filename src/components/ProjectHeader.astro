@@ -1,0 +1,31 @@
+---
+import type { Project } from '../data/projects';
+interface Props { project: Project }
+const { project: p } = Astro.props;
+---
+
+<header class="project-header">
+  <a href="/#work" class="back muted">← All projects</a>
+  <span class="eyebrow">{p.team} · {p.period}</span>
+  <h1>{p.name}</h1>
+  <p class="lead">{p.summary}</p>
+  <dl class="meta">
+    <div><dt>My role</dt><dd>{p.role}</dd></div>
+    <div><dt>Source</dt><dd><a href={p.repo}>Repository ↗</a></dd></div>
+  </dl>
+  <div class="stats">
+    {p.stats.map((s) => (
+      <div><span class="stat-value">{s.value}</span><span class="stat-label">{s.label}</span></div>
+    ))}
+  </div>
+  <ul class="chips">{p.stack.map((t) => <li>{t}</li>)}</ul>
+</header>
+
+<style>
+  .project-header { padding: 56px 0 40px; }
+  .back { display: inline-block; text-decoration: none; font-size: 0.9rem; margin-bottom: 28px; }
+  .lead { font-size: 1.15rem; max-width: 46rem; }
+  .meta { display: flex; flex-wrap: wrap; gap: 32px; margin: 1.4rem 0 0; }
+  .meta dt { font-size: 0.8rem; color: var(--muted); }
+  .meta dd { margin: 0; font-weight: 550; }
+</style>

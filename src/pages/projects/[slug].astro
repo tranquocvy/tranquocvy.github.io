@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectHeader from '../../components/ProjectHeader.astro';
+import Contributions from '../../components/Contributions.astro';
+import { projects } from '../../data/projects';
+
+export function getStaticPaths() {
+  // Ticket_Box has its own long-form case study page.
+  return projects
+    .filter((p) => p.slug !== 'ticket-box')
+    .map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+---
+
+<Base title={project.name} description={project.summary}>
+  <div class="wrap">
+    <ProjectHeader project={project} />
+    <section>
+      <Contributions project={project} />
+    </section>
+
+    {project.slug === 'retrobit' && (
+      <section>
+        <span class="eyebrow">Design note</span>
+        <h2>How the rating system works</h2>
+        <p>
+          Every finished match updates the player’s rating with the standard ELO formula. The expected score against an
+          opponent is <code>E = 1 / (1 + 10^((R_opp − R_me) / 400))</code>, and the new rating is
+          <code>R' = R + K · (S − E)</code>, where <code>S</code> is 1 for a win, 0.5 for a draw and 0 for a loss.
+        </p>
+        <p>The interesting part is choosing <code>K</code>, which controls how fast a rating moves:</p>
+        <pre><code>{`function getKFactor(elo, totalGames = 0) {
+  if (totalGames < 10) return 50;   // new players: find their level fast
+  if (totalGames < 30) return 40;
+  if (elo < 1000) return 35;        // Bronze
+  if (elo < 1300) return 32;        // Silver
+  if (elo < 1600) return 28;        // Gold
+  if (elo < 1900) return 24;        // Platinum
+  if (elo < 2200) return 20;        // Diamond
+  return 16;                        // Master+: stable ratings
+}`}</code></pre>
+        <p>
+          Player-vs-AI games have no human opponent, so each bot difficulty gets a fixed rating (for example, Caro-5 easy
+          is 700 and medium is 1100). Beating an easy bot barely moves your rating; beating a hard one moves it a lot.
+          Score-based games such as Snake and Match-3 have no opponent at all, so the score is compared with a target and
+          turned into a 0–1 result: reaching the target counts as a win, 50–99% of it maps linearly to 0.3–0.9, and
+          anything below half maps to 0–0.3.
+        </p>
+      </section>
+    )}
+  </div>
+</Base>

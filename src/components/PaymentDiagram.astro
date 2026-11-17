@@ -1,0 +1,60 @@
+---
+// Request path for POST /payments in Ticket_Box, as implemented in payment.service.ts
+// and payment-gateway.client.ts.
+---
+
+<figure class="diagram">
+  <svg viewBox="0 0 760 360" role="img" aria-labelledby="pd-title pd-desc">
+    <title id="pd-title">Payment request path</title>
+    <desc id="pd-desc">
+      Client sends a payment request with an Idempotency-Key. The API checks Redis for a completed result, reserves the
+      key with SET NX, loads the order from PostgreSQL, then calls PayOS through a circuit breaker. PayOS later calls a
+      webhook that marks the order paid and issues tickets, or releases inventory on failure.
+    </desc>
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" class="ah" />
+      </marker>
+    </defs>
+
+    <!-- boxes -->
+    <g class="box"><rect x="10" y="40" width="120" height="56" rx="10" /><text x="70" y="65">Client</text><text x="70" y="83" class="sub">Idempotency-Key</text></g>
+    <g class="box hl"><rect x="190" y="40" width="170" height="56" rx="10" /><text x="275" y="65">Payment API</text><text x="275" y="83" class="sub">NestJS · validate UUID v4</text></g>
+    <g class="box"><rect x="430" y="10" width="150" height="50" rx="10" /><text x="505" y="32">Redis</text><text x="505" y="49" class="sub">GET → SET NX (24h)</text></g>
+    <g class="box"><rect x="430" y="80" width="150" height="50" rx="10" /><text x="505" y="102">PostgreSQL</text><text x="505" y="119" class="sub">order · unique key</text></g>
+    <g class="box hl"><rect x="190" y="180" width="170" height="56" rx="10" /><text x="275" y="205">Circuit breaker</text><text x="275" y="223" class="sub">opossum · 3s timeout</text></g>
+    <g class="box"><rect x="430" y="180" width="150" height="56" rx="10" /><text x="505" y="205">PayOS</text><text x="505" y="223" class="sub">checkout link + QR</text></g>
+    <g class="box hl"><rect x="190" y="290" width="170" height="56" rx="10" /><text x="275" y="315">Webhook handler</text><text x="275" y="333" class="sub">verify signature</text></g>
+    <g class="box"><rect x="430" y="290" width="150" height="56" rx="10" /><text x="505" y="315">Ticketing</text><text x="505" y="333" class="sub">issue tickets / release seats</text></g>
+    <g class="box ghost"><rect x="620" y="290" width="130" height="56" rx="10" /><text x="685" y="315">Cleanup job</text><text x="685" y="333" class="sub">expire pending orders</text></g>
+
+    <!-- arrows -->
+    <path d="M130 68 H186" class="ln" marker-end="url(#arrow)" />
+    <path d="M360 58 L426 38" class="ln" marker-end="url(#arrow)" />
+    <path d="M360 78 L426 102" class="ln" marker-end="url(#arrow)" />
+    <path d="M275 96 V176" class="ln" marker-end="url(#arrow)" />
+    <path d="M360 208 H426" class="ln" marker-end="url(#arrow)" />
+    <path d="M505 236 V262 H275 V286" class="ln dashed" marker-end="url(#arrow)" />
+    <path d="M360 318 H426" class="ln" marker-end="url(#arrow)" />
+    <path d="M620 318 H584" class="ln dashed" marker-end="url(#arrow)" />
+
+    <text x="140" y="140" class="lbl">1 · reserve key</text>
+    <text x="512" y="256" class="lbl">2 · async callback</text>
+  </svg>
+  <figcaption class="muted">Request path for <code>POST /payments</code>. Highlighted boxes are the parts I wrote.</figcaption>
+</figure>
+
+<style>
+  .diagram { margin: 24px 0; overflow-x: auto; }
+  .diagram svg { min-width: 640px; width: 100%; height: auto; display: block; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
+  .diagram figcaption { font-size: 0.85rem; margin-top: 8px; }
+  .box rect { fill: var(--surface-2); stroke: var(--line); stroke-width: 1.5; }
+  .box.hl rect { fill: var(--accent-soft); stroke: var(--accent); }
+  .box.ghost rect { stroke-dasharray: 4 4; }
+  .box text { fill: var(--text); font: 600 13px var(--sans); text-anchor: middle; }
+  .box text.sub { fill: var(--muted); font: 400 10.5px var(--mono); }
+  .ln { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+  .ln.dashed { stroke-dasharray: 5 4; }
+  .ah { fill: var(--muted); }
+  .lbl { fill: var(--accent); font: 500 10.5px var(--mono); }
+</style>

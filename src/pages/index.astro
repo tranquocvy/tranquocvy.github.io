@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, toolkit } from '../data/site';
+import { projects } from '../data/projects';
+
+const featured = projects.find((p) => p.featured)!;
+const others = projects.filter((p) => !p.featured);
+---
+
+<Base>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">{site.location} · Open to internships & junior roles</span>
+      <h1>{site.name}</h1>
+      <p class="lead"><strong>{site.role}.</strong> {site.tagline}</p>
+      <div class="btn-row">
+        <a class="btn primary" href={`/projects/${featured.slug}`}>Read the Ticket_Box case study →</a>
+        <a class="btn" href={`mailto:${site.email}`}>Email me</a>
+        <a class="btn" href={site.github}>GitHub</a>
+      </div>
+      <p class="honesty muted">
+        Every project here is team coursework. Each page separates <strong>what I built</strong> from what my teammates built,
+        and links to the merged pull requests as evidence.
+      </p>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap">
+      <span class="eyebrow">Selected work</span>
+      <h2>Featured project</h2>
+
+      <a class="card featured" href={`/projects/${featured.slug}`}>
+        <div class="featured-head">
+          <div>
+            <h3>{featured.name}</h3>
+            <p class="muted role">{featured.role} · {featured.team} · {featured.period}</p>
+          </div>
+          <span class="arrow" aria-hidden="true">→</span>
+        </div>
+        <p>{featured.summary}</p>
+        <div class="stats">
+          {featured.stats.map((s) => (
+            <div><span class="stat-value">{s.value}</span><span class="stat-label">{s.label}</span></div>
+          ))}
+        </div>
+        <ul class="highlights">
+          {featured.contributions.slice(0, 3).map((c) => <li><strong>{c.title}.</strong> {c.body}</li>)}
+        </ul>
+        <ul class="chips">{featured.stack.map((t) => <li>{t}</li>)}</ul>
+      </a>
+
+      <h2 class="more-title">More projects</h2>
+      <div class="grid cols-3">
+        {others.map((p) => (
+          <a class="card project" href={`/projects/${p.slug}`}>
+            <h3>{p.name}</h3>
+            <p class="muted role">{p.role}</p>
+            <p>{p.summary}</p>
+            <ul class="chips">{p.stack.slice(0, 5).map((t) => <li>{t}</li>)}</ul>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="toolkit">
+    <div class="wrap">
+      <span class="eyebrow">Toolkit</span>
+      <h2>What I reach for</h2>
+      <p class="muted">Bold items are the ones I have used most in the projects above.</p>
+      <div class="grid cols-2 toolkit">
+        {toolkit.map((g) => (
+          <div class="card">
+            <h3>{g.group}</h3>
+            <p class="tools"><strong>{g.core.join(' · ')}</strong></p>
+            <p class="tools muted">Also: {g.also.join(' · ')}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap contact">
+      <span class="eyebrow">Contact</span>
+      <h2>Let’s talk</h2>
+      <p>I’m looking for backend or fullstack internship and junior roles. The fastest way to reach me is email.</p>
+      <div class="btn-row">
+        <a class="btn primary" href={`mailto:${site.email}`}>{site.email}</a>
+        <a class="btn" href={site.github}>github.com/{site.githubHandle}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding: 96px 0 72px; }
+  .lead { font-size: 1.2rem; max-width: 46rem; margin-bottom: 1.6rem; }
+  .honesty { max-width: 46rem; font-size: 0.92rem; margin-top: 1.6rem; }
+  .featured { display: block; text-decoration: none; transition: border-color 0.15s; }
+  .featured:hover, .project:hover { border-color: var(--accent); color: inherit; }
+  .featured-head { display: flex; justify-content: space-between; gap: 12px; }
+  .featured h3 { font-size: 1.6rem; margin-bottom: 0.2em; }
+  .arrow { font-size: 1.5rem; color: var(--accent); }
+  .role { font-size: 0.9rem; margin-bottom: 1em; }
+  .highlights { padding-left: 1.1rem; margin: 0 0 1.2rem; }
+  .highlights li { margin-bottom: 0.4rem; }
+  .more-title { margin-top: 56px; }
+  .project { text-decoration: none; display: flex; flex-direction: column; }
+  .project p:last-of-type { flex: 1; }
+  .tools { margin: 0 0 0.4rem; font-size: 0.95rem; }
+  .toolkit h3 { margin-bottom: 0.5rem; }
+</style>
