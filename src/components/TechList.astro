@@ -1,0 +1,65 @@
+---
+import { tech, isDark } from '../data/tech';
+
+interface Props {
+  items: string[];
+  /** "tile": icon above label (toolkit). "inline": compact pill (project cards). */
+  variant?: 'tile' | 'inline';
+  muted?: boolean;
+}
+const { items, variant = 'inline', muted = false } = Astro.props;
+const techs = items.map(tech);
+---
+
+<ul class:list={['tech', variant, { muted }]}>
+  {techs.map((t) => (
+    <li title={t.name}>
+      {t.icon ? (
+        <svg viewBox="0 0 24 24" aria-hidden="true" style={`--brand:#${t.icon.hex}`} class:list={{ dark: isDark(t.icon.hex) }}>
+          <path d={t.icon.path} />
+        </svg>
+      ) : (
+        <span class="mono" aria-hidden="true">{t.mono}</span>
+      )}
+      <span class="label">{t.name}</span>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .tech { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  svg { fill: var(--brand); flex: none; }
+  svg.dark { fill: var(--text); }
+  .mono {
+    display: grid; place-items: center; flex: none;
+    font: 600 0.62rem var(--mono); color: var(--muted);
+    border: 1px solid var(--line); border-radius: 6px;
+  }
+
+  /* inline pills */
+  .inline li {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px 4px 7px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--surface);
+    font-size: 0.8rem; color: var(--muted);
+  }
+  .inline svg { width: 14px; height: 14px; }
+  .inline .mono { width: 16px; height: 16px; font-size: 0.5rem; }
+
+  /* tiles */
+  .tile { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 10px; }
+  .tile li {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 14px 6px 10px; border-radius: 12px;
+    background: var(--surface-2); border: 1px solid transparent;
+    text-align: center; transition: transform 0.15s, border-color 0.15s;
+  }
+  .tile li:hover { transform: translateY(-2px); border-color: var(--line); }
+  .tile svg { width: 30px; height: 30px; }
+  .tile .mono { width: 30px; height: 30px; font-size: 0.7rem; }
+  .tile .label { font-size: 0.78rem; line-height: 1.25; font-weight: 550; }
+
+  .tile.muted li { background: transparent; border: 1px dashed var(--line); }
+  .tile.muted svg { width: 22px; height: 22px; opacity: 0.85; }
+  .tile.muted .label { color: var(--muted); font-weight: 450; }
+</style>
