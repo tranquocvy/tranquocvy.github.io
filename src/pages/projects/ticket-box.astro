@@ -1,8 +1,10 @@
 ---
+import { Code } from 'astro:components';
 import Base from '../../layouts/Base.astro';
 import ProjectHeader from '../../components/ProjectHeader.astro';
 import Contributions from '../../components/Contributions.astro';
 import PaymentDiagram from '../../components/PaymentDiagram.astro';
+import ProjectNav from '../../components/ProjectNav.astro';
 import { projects } from '../../data/projects';
 
 const project = projects.find((p) => p.slug === 'ticket-box')!;
@@ -51,7 +53,7 @@ const repo = 'https://github.com/CQ23-SoftwareDesign-2026/Ticket_Box/blob/develo
         requests arriving together both see “not there” and both create a payment. So the reservation uses Redis
         <code>SET NX</code>, which checks and writes in one atomic step.
       </p>
-      <pre><code>{`// payment.service.ts — processPayment (simplified)
+      <Code lang="ts" themes={{ light: 'github-light', dark: 'github-dark' }} code={`// payment.service.ts — processPayment (simplified)
 const cached = await redis.getJson(cacheKey);
 if (isCompleted(cached)) return cached.response;          // replay: same answer as before
 
@@ -63,7 +65,7 @@ if (!reserved) {
   if (existing) return existing;
   throw new ConflictException('Payment request is already in progress'); // 409
 }
-// ...load the order, call the gateway, store COMPLETED or FAILED under the same key`}</code></pre>
+// ...load the order, call the gateway, store COMPLETED or FAILED under the same key`} />
       <p>
         Redis is fast but not the source of truth: it can be restarted or evict keys. That is why the key is also
         stored in a unique column on the payment transaction in PostgreSQL. If Redis forgets, the database still
@@ -85,14 +87,14 @@ if (!reserved) {
         hold connections and memory the rest of the API needs. A circuit breaker watches the error rate and, once it is
         too high, fails fast for a while instead of calling the gateway at all.
       </p>
-      <pre><code>{`// payment-gateway.client.ts
+      <Code lang="ts" themes={{ light: 'github-light', dark: 'github-dark' }} code={`// payment-gateway.client.ts
 new CircuitBreaker((input) => strategy.createPaymentSession(input), {
   timeout: 3_000,               // a call slower than 3 s counts as a failure
   errorThresholdPercentage: 50, // open when at least half of the calls fail...
   volumeThreshold: 4,           // ...but only after 4+ calls, so one error can't trip it
   rollingCountTimeout: 10_000,  // measured over a 10 s window (10 one-second buckets)
   resetTimeout: 60_000,         // after 60 s, let one trial call through (half-open)
-});`}</code></pre>
+});`} />
       <p>
         There is one breaker per payment method, so a failing provider cannot block another one. Gateways sit behind a
         small Strategy interface (<code>createPaymentSession</code>, <code>getPaymentSession</code>,
@@ -186,6 +188,7 @@ new CircuitBreaker((input) => strategy.createPaymentSession(input), {
     <section id="built">
       <Contributions project={project} heading="Everything I built, with evidence" />
     </section>
+    <ProjectNav slug={project.slug} />
   </div>
 </Base>
 

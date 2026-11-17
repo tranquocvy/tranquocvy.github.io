@@ -81,7 +81,7 @@ export const projects: Project[] = [
     repo: 'https://github.com/web-dev-23-31/Retrobit_Board_Game',
     stats: [
       { label: 'Merged PRs', value: '19' },
-      { label: 'Most PRs on the team', value: 'Yes' },
+      { label: 'PRs opened — most on the team', value: '23' },
       { label: 'ELO module written by me', value: '100%' },
     ],
     contributions: [

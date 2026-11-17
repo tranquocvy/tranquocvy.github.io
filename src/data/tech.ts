@@ -15,7 +15,6 @@ const map: Record<string, string> = {
   Express: 'siExpress',
   RabbitMQ: 'siRabbitmq',
   'C# / .NET': 'siDotnet',
-  'C#': 'siSharp',
   '.NET': 'siDotnet',
   'Java / Spring Boot': 'siSpringboot',
   PostgreSQL: 'siPostgresql',
@@ -52,10 +51,13 @@ const monogram = (name: string) =>
     .join('')
     .toUpperCase();
 
+// Short labels for tiles without a logo.
+const monoOverride: Record<string, string> = { 'C#': 'C#', 'SQL Server': 'SQL', 'WinUI 3 (MVVM)': 'UI', MVVM: 'VM', PayOS: 'PO' };
+
 export function tech(name: string): Tech {
   const key = map[name];
   const icon = key ? pick(key) : undefined;
-  return icon ? { name, icon } : { name, mono: monogram(name) };
+  return icon ? { name, icon } : { name, mono: monoOverride[name] ?? monogram(name) };
 }
 
 /** Very dark brand colours (Express, Next.js, Prisma…) are drawn in the text colour so they stay visible in dark mode. */

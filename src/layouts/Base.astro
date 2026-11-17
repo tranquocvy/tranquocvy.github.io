@@ -19,6 +19,10 @@ const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site
     <meta name="description" content={description} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <meta name="theme-color" content="#0f766e" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -51,7 +55,7 @@ const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site
     <footer class="site-footer">
       <div class="wrap footer-inner">
         <span>© {new Date().getFullYear()} {site.nativeName}</span>
-        <span class="muted">Built with Astro · Source on <a href={site.github}>GitHub</a></span>
+        <span class="muted">Built with Astro · Source on <a href="https://github.com/tranquocvy/tranquocvy.github.io">GitHub</a></span>
       </div>
     </footer>
     <script is:inline>

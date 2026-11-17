@@ -1,0 +1,24 @@
+---
+import { projects } from '../data/projects';
+interface Props { slug: string }
+const i = projects.findIndex((p) => p.slug === Astro.props.slug);
+const next = projects[(i + 1) % projects.length];
+---
+
+<nav class="project-nav" aria-label="More projects">
+  <a href="/#work" class="muted">← All projects</a>
+  <a href={`/projects/${next.slug}/`} class="next">
+    <span class="muted small">Next project</span>
+    <strong>{next.name} →</strong>
+  </a>
+</nav>
+
+<style>
+  .project-nav {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+    border-top: 1px solid var(--line); padding: 32px 0 56px;
+  }
+  .project-nav a { text-decoration: none; }
+  .next { text-align: right; display: flex; flex-direction: column; }
+  .small { font-size: 0.82rem; }
+</style>

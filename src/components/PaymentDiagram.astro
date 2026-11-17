@@ -4,7 +4,7 @@
 ---
 
 <figure class="diagram">
-  <svg viewBox="0 0 760 360" role="img" aria-labelledby="pd-title pd-desc">
+  <svg viewBox="0 0 830 360" role="img" aria-labelledby="pd-title pd-desc">
     <title id="pd-title">Payment request path</title>
     <desc id="pd-desc">
       Client sends a payment request with an Idempotency-Key. The API checks Redis for a completed result, reserves the
@@ -25,8 +25,8 @@
     <g class="box hl"><rect x="190" y="180" width="170" height="56" rx="10" /><text x="275" y="205">Circuit breaker</text><text x="275" y="223" class="sub">opossum · 3s timeout</text></g>
     <g class="box"><rect x="430" y="180" width="150" height="56" rx="10" /><text x="505" y="205">PayOS</text><text x="505" y="223" class="sub">checkout link + QR</text></g>
     <g class="box hl"><rect x="190" y="290" width="170" height="56" rx="10" /><text x="275" y="315">Webhook handler</text><text x="275" y="333" class="sub">verify signature</text></g>
-    <g class="box"><rect x="430" y="290" width="150" height="56" rx="10" /><text x="505" y="315">Ticketing</text><text x="505" y="333" class="sub">issue tickets / release seats</text></g>
-    <g class="box ghost"><rect x="620" y="290" width="130" height="56" rx="10" /><text x="685" y="315">Cleanup job</text><text x="685" y="333" class="sub">expire pending orders</text></g>
+    <g class="box"><rect x="430" y="290" width="190" height="56" rx="10" /><text x="525" y="315">Ticketing</text><text x="525" y="333" class="sub">issue tickets · free seats</text></g>
+    <g class="box ghost"><rect x="660" y="290" width="160" height="56" rx="10" /><text x="740" y="315">Cleanup job</text><text x="740" y="333" class="sub">expire pending orders</text></g>
 
     <!-- arrows -->
     <path d="M130 68 H186" class="ln" marker-end="url(#arrow)" />
@@ -36,7 +36,7 @@
     <path d="M360 208 H426" class="ln" marker-end="url(#arrow)" />
     <path d="M505 236 V262 H275 V286" class="ln dashed" marker-end="url(#arrow)" />
     <path d="M360 318 H426" class="ln" marker-end="url(#arrow)" />
-    <path d="M620 318 H584" class="ln dashed" marker-end="url(#arrow)" />
+    <path d="M660 318 H624" class="ln dashed" marker-end="url(#arrow)" />
 
     <text x="140" y="140" class="lbl">1 · reserve key</text>
     <text x="512" y="256" class="lbl">2 · async callback</text>

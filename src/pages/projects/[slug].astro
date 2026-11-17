@@ -1,7 +1,9 @@
 ---
+import { Code } from 'astro:components';
 import Base from '../../layouts/Base.astro';
 import ProjectHeader from '../../components/ProjectHeader.astro';
 import Contributions from '../../components/Contributions.astro';
+import ProjectNav from '../../components/ProjectNav.astro';
 import { projects } from '../../data/projects';
 
 export function getStaticPaths() {
@@ -31,7 +33,7 @@ const { project } = Astro.props;
           <code>R' = R + K · (S − E)</code>, where <code>S</code> is 1 for a win, 0.5 for a draw and 0 for a loss.
         </p>
         <p>The interesting part is choosing <code>K</code>, which controls how fast a rating moves:</p>
-        <pre><code>{`function getKFactor(elo, totalGames = 0) {
+        <Code lang="js" themes={{ light: 'github-light', dark: 'github-dark' }} code={`function getKFactor(elo, totalGames = 0) {
   if (totalGames < 10) return 50;   // new players: find their level fast
   if (totalGames < 30) return 40;
   if (elo < 1000) return 35;        // Bronze
@@ -40,7 +42,7 @@ const { project } = Astro.props;
   if (elo < 1900) return 24;        // Platinum
   if (elo < 2200) return 20;        // Diamond
   return 16;                        // Master+: stable ratings
-}`}</code></pre>
+}`} />
         <p>
           Player-vs-AI games have no human opponent, so each bot difficulty gets a fixed rating (for example, Caro-5 easy
           is 700 and medium is 1100). Beating an easy bot barely moves your rating; beating a hard one moves it a lot.
@@ -50,5 +52,10 @@ const { project } = Astro.props;
         </p>
       </section>
     )}
+    <ProjectNav slug={project.slug} />
   </div>
 </Base>
+
+<style>
+  section p, section ul, section ol { max-width: 46rem; }
+</style>
