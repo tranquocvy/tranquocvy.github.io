@@ -1,0 +1,110 @@
+% CV — Tran Quoc Vy
+% Rebuilt 2026-11-17 to match the original layout (Computer Modern, single page).
+% Build: tectonic CV_TranQuocVy_BackendEngineer.tex   (or upload to Overleaf, pdfLaTeX)
+% Every project claim is backed by merged PRs; see CONTRIBUTIONS_AUDIT.md (kept outside this repo) before editing.
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,top=1.1cm,bottom=1.0cm,left=1.5cm,right=1.5cm]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{tabularx}
+\usepackage{xcolor}
+
+% Phone number lives in phone.local.tex (gitignored): \def\CVPhone{...}
+\IfFileExists{phone.local.tex}{\input{phone.local.tex}}{}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+% Section headings: bold uppercase with a full-width rule underneath
+\titleformat{\section}{\large\bfseries}{}{0em}{\MakeUppercase}[\vspace{-7pt}\rule{\linewidth}{0.6pt}]
+\titlespacing*{\section}{0pt}{6pt}{3pt}
+
+\setlist[itemize]{leftmargin=1.1em, label=\textbullet, itemsep=0.5pt, topsep=1pt, parsep=0pt}
+
+% \entry{Title}{Date}{Subtitle}
+\newcommand{\entry}[3]{%
+  \begin{tabularx}{\linewidth}{@{}X r@{}}
+    \textbf{#1} & #2 \\
+  \end{tabularx}\\[-2pt]
+  {\itshape #3}\par
+}
+
+\begin{document}
+
+% ---------- Header ----------
+\begin{center}
+  {\fontsize{24}{28}\selectfont TRAN QUOC VY}\\[3pt]
+  {\large\bfseries BACKEND ENGINEER INTERN}\\[4pt]
+  {\small \href{mailto:tqvy.work@gmail.com}{tqvy.work@gmail.com} \textbar{}
+  \ifdefined\PublicVersion\else\ifdefined\CVPhone \CVPhone{} \textbar{} \fi\fi
+  \href{https://tranquocvy.github.io}{tranquocvy.github.io} \textbar{}
+  \href{https://github.com/tranquocvy}{github.com/tranquocvy} \textbar{}
+  Ho Chi Minh City}
+\end{center}
+\vspace{-4pt}
+
+% ---------- Summary ----------
+\section{Summary}
+Final-year Software Engineering student at HCMUS focused on backend engineering. In team projects I own the
+parts that must stay correct when things fail: payments with idempotency and circuit breakers, message-queue
+workers, Redis caching and CI/CD. Case studies with links to my merged PRs:
+\href{https://tranquocvy.github.io}{tranquocvy.github.io}.
+
+% ---------- Education ----------
+\section{Education}
+\entry{University of Science (HCMUS) -- VNU-HCM}{2023 -- 2027}{Bachelor of Software Engineering}
+\begin{itemize}
+  \item \textbf{GPA:} 8.83/10 (3.788/4.0)
+  \item \textbf{Relevant Coursework:} Data Structures and Algorithms, Object-Oriented Programming, Database Systems,
+        Web Application Development, Software Engineering, Software Design, Introduction to DevOps
+\end{itemize}
+
+% ---------- Skills ----------
+\section{Skills}
+\begin{itemize}
+  \item \textbf{Backend:} Node.js, NestJS, Express, REST API design, JWT authentication, role-based authorization
+  \item \textbf{Data \& Messaging:} PostgreSQL, Prisma, Knex, Redis, RabbitMQ, MongoDB (basic)
+  \item \textbf{DevOps:} Docker, GitHub Actions, Git/Gitflow, Linux, Railway; Jenkins and Kubernetes (basic)
+  \item \textbf{Practices:} Unit testing, design patterns (Strategy, cache-aside, circuit breaker), code review via pull requests, Agile/Scrum
+  \item \textbf{Languages:} TypeScript, JavaScript, C++, C\#
+\end{itemize}
+
+% ---------- Projects ----------
+\section{Projects}
+\entry{\href{https://tranquocvy.github.io/projects/ticket-box/}{Ticket\_Box -- Event Ticketing Platform}}{May 2026 -- Jul 2026}%
+{Backend lead for payments \& background jobs, team of 4 \textbullet{} 17 merged PRs, 41\% of commits}
+\begin{itemize}
+  \item \textbf{Payment reliability:} Built the PayOS payment module behind a Strategy interface with two-layer
+        idempotency (Redis \texttt{SET NX} reservation plus a unique key in PostgreSQL) to stop duplicate charges.
+  \item \textbf{Fault tolerance:} Wrapped gateway calls in an opossum circuit breaker (3\,s timeout, opens at 50\%
+        errors) that fails fast with \texttt{503}; reconciled timed-out transactions and released held seats on
+        cancellation or failed webhooks.
+  \item \textbf{Async workers:} Built RabbitMQ consumers for streamed CSV guest-list import (batched PostgreSQL
+        upserts with progress tracking), AI artist bios from PDF press kits via Gemini, and email/in-app notifications.
+  \item \textbf{Performance \& delivery:} Added Redis cache-aside for concert reads and a token-bucket rate limiter;
+        set up GitHub Actions CI (lint, typecheck, Prisma validation, migration check) and Docker deployment to Railway.
+  \item \textbf{Stack:} NestJS, Prisma, PostgreSQL, Redis, RabbitMQ, PayOS, Docker; unit tests for payment timeout,
+        duplicate-payment and circuit-breaker paths.
+\end{itemize}
+
+\vspace{3pt}
+\entry{\href{https://tranquocvy.github.io/projects/retrobit/}{Retrobit -- Retro Board Game Platform}}{Jan 2026}%
+{Backend owner, team of 4 \textbullet{} Express, PostgreSQL, Knex, JWT, React, Vite}
+\begin{itemize}
+  \item \textbf{API foundation:} Designed and built the Express/PostgreSQL REST API for users, games and
+        resumable game sessions, with Knex migrations and seed data.
+  \item \textbf{Auth \& security:} Implemented JWT authentication, role-based authorization middleware and email
+        OTP verification over SMTP.
+  \item \textbf{Rating system:} Wrote the ELO engine: dynamic K-factor, fixed bot ratings for player-vs-AI modes,
+        and score-to-result mapping for single-player games; plus the achievements service.
+  \item \textbf{Delivery:} Shipped the Match-3 and Memory games on the React frontend and deployed both tiers;
+        opened 23 PRs, the most on the team.
+\end{itemize}
+
+\end{document}

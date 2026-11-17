@@ -1,0 +1,8 @@
+.build/
+*.aux
+*.log
+*.out
+# Built PDFs: the full one contains the phone number
+*.pdf
+# Private contact details
+*.local.tex
