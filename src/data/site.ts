@@ -8,6 +8,8 @@ export const site = {
   email: 'tqvy.work@gmail.com',
   github: 'https://github.com/tranquocvy',
   githubHandle: 'tranquocvy',
+  linkedin: 'https://www.linkedin.com/in/tqvy/',
+  linkedinHandle: 'tqvy',
 };
 
 export const toolkit = [
